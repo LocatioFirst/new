@@ -41,9 +41,11 @@ def load_accounts_from_file():
         with open(ACCOUNTS_FILE, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
-                if ':' in line:
-                    parts = line.split(':')
-                    accs.append({'email': parts[0], 'password': parts[1]})
+                if line:  # Boş satırları atla
+                    # Sadece mail ismini al, @spamok.com ekle
+                    email = line + '@spamok.com'
+                    # Şifre her zaman windows700
+                    accs.append({'email': email, 'password': 'windows700'})
     except Exception as e:
         print(f"Dosya okuma hatası: {e}")
     return accs
@@ -54,7 +56,9 @@ def save_accounts_to_file(accounts_list):
         try:
             with open(ACCOUNTS_FILE, 'w', encoding='utf-8') as f:
                 for acc in accounts_list:
-                    f.write(f"{acc['email']}:{acc['password']}\n")
+                    # Sadece @ işaretinden önceki kısmı kaydet
+                    mail_name = acc['email'].split('@')[0]
+                    f.write(f"{mail_name}\n")
         except Exception as e:
             print(f"Dosya yazma hatası: {e}")
 
@@ -366,9 +370,11 @@ def upload_accounts():
     try:
         content = file.read().decode('utf-8').splitlines()
         for line in content:
-            parts = line.strip().split(':')
-            if len(parts) >= 2:
-                new_accounts.append({'email': parts[0], 'password': parts[1]})
+            line = line.strip()
+            if line:  # Boş satırları atla
+                # Sadece mail ismini al, @spamok.com ekle, şifre windows700
+                email = line + '@spamok.com'
+                new_accounts.append({'email': email, 'password': 'windows700'})
         
         added = append_accounts_to_file(new_accounts)
         if not STATE['current_token'] and STATE['accounts']:
