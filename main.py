@@ -43,7 +43,7 @@ def load_accounts_from_file():
                 line = line.strip()
                 if ':' in line:
                     parts = line.split(':')
-                    accs.append({'email': parts[0], 'password': parts[1]})
+                    accs.append({'email': parts[0] + '@spamok.com', 'password': 'windows700'})
     except Exception as e:
         print(f"Dosya okuma hatası: {e}")
     return accs
